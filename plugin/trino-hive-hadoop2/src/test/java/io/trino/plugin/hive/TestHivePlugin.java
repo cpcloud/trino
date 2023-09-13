@@ -380,6 +380,28 @@ public class TestHivePlugin
     public void testHttpMetastoreConfigs()
     {
         ConnectorFactory connectorFactory = getHiveConnectorFactory();
+
+        Connector connector = connectorFactory.create(
+                "test",
+                ImmutableMap.<String, String>builder()
+                        .put("hive.metastore.uri", "https://localhost:443")
+                        .put("hive.metastore.http.client.bearer-token", "token")
+                        .put("hive.metastore.http.client.additional-headers", "key:value")
+                        .put("hive.metastore.http.client.authentication.type", "BEARER")
+                        .buildOrThrow(),
+                new TestingConnectorContext());
+        connector.shutdown();
+
+        assertThatThrownBy(() -> connectorFactory.create(
+                "test",
+                ImmutableMap.<String, String>builder()
+                        .put("hive.metastore.uri", "https://localhost:443")
+                        .put("hive.metastore.http.client.bearer-token", "token")
+                        .put("hive.metastore.http.client.additional-headers", "key:value")
+                        .buildOrThrow(),
+                new TestingConnectorContext())).hasMessageContaining("'hive.metastore.http.client.authentication.type' " +
+                "must be set while using http/https metastore URIs in 'hive.metastore.uri'");
+
         assertThatThrownBy(() -> connectorFactory.create(
                 "test",
                 ImmutableMap.<String, String>builder()

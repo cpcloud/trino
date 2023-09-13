@@ -96,6 +96,9 @@ public class ThriftMetastoreModule
                 if (httpMetastoreConfig.getHttpBearerToken() == null) {
                     throw new IllegalStateException("'hive.metastore.http.client.bearer-token' must be set while using http/https metastore URIs in 'hive.metastore.uri'");
                 }
+                if (httpMetastoreConfig.getAuthenticationMode().isEmpty()) {
+                    throw new IllegalStateException(("'hive.metastore.http.client.authentication.type' must be set while using http/https metastore URIs in 'hive.metastore.uri'"));
+                }
             }
         }
     }

@@ -33,7 +33,7 @@ public class ThriftHttpMetastoreConfig
         BEARER
     }
 
-    private AuthenticationMode authenticationMode = AuthenticationMode.BEARER;
+    private AuthenticationMode authenticationMode;
     private String httpBearerToken;
     private Map<String, String> additionalHeaders = ImmutableMap.of();
 
